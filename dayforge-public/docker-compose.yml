@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: dayforge
+      POSTGRES_PASSWORD: dayforge-dev-password
+      POSTGRES_DB: dayforge
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  web:
+    build: .
+    environment:
+      SECRET_KEY: dev-only-secret-change-me
+      DATABASE_URL: postgresql://dayforge:dayforge-dev-password@db:5432/dayforge
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+volumes:
+  pgdata:
