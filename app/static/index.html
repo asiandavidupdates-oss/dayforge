@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DayForge — Daily Productivity & Achievement</title>
+<link rel="stylesheet" href="/static/styles.css"></head>
+<body>
+<header>
+  <div><h1>DayForge</h1>
+    <!-- Profile section under the DayForge name -->
+    <div id="profile-strip" class="row muted" style="font-size:14px">
+      <span id="profile-strip-text">Not signed in</span>
+      <button class="secondary" id="open-profile-btn">Profile</button>
+    </div>
+  </div>
+  <nav>
+    <button class="secondary" data-nav="dashboard">Dashboard</button>
+    <button class="secondary" data-nav="weekly">Weekly</button>
+    <button class="secondary" data-nav="monthly">Monthly</button>
+    <button class="secondary" data-nav="calendar">Calendar</button>
+    <button class="secondary" data-nav="templates">Templates</button>
+    <button class="secondary" data-nav="notifications">Notifications</button>
+    <button class="secondary" data-nav="settings">Settings</button>
+    <button class="secondary" id="logout-btn">Logout</button>
+  </nav>
+</header>
+<main>
+  <section id="view-auth" class="card">
+    <h2>Welcome to DayForge</h2>
+    <p class="muted">Build your daily routine, track progress, and grow your streak — one day at a time.</p>
+    <label>Email</label><input id="auth-email" type="email" placeholder="you@example.com">
+    <label>Password (min 8 characters)</label><input id="auth-pass" type="password">
+    <label>Name (for registration)</label><input id="auth-name" placeholder="Your name">
+    <div class="row" style="margin-top:12px"><button id="login-btn">Login</button><button id="register-btn" class="secondary">Register</button></div>
+    <p id="auth-msg" class="muted"></p>
+    <details><summary>Forgot password?</summary>
+      <label>Email</label><input id="forgot-email" type="email">
+      <button id="forgot-btn" class="secondary">Request reset</button><p id="forgot-msg" class="muted"></p>
+    </details>
+  </section>
+
+  <section id="view-onboarding" class="card hidden">
+    <h2>Start My Journey</h2><p class="muted">Today becomes your Day 1.</p>
+    <label>Name</label><input id="ob-name">
+    <label>Age</label><input id="ob-age" type="number" min="1" max="120" placeholder="e.g. 30">
+    <label>Timezone</label><input id="ob-tz" placeholder="e.g. Asia/Karachi">
+    <label><input type="checkbox" id="ob-auto" style="width:auto"> Auto day confirmation (forgotten days auto-finalize as Automatically Confirmed)</label>
+    <div class="row" style="margin-top:12px"><button id="ob-btn">Start My Journey</button></div>
+  </section>
+
+  <section id="view-dashboard" class="hidden">
+    <div class="card">
+      <div class="row"><button class="secondary" id="prev-day">← Previous Day</button>
+        <div><strong id="dash-date"></strong> · <span id="dash-weekday"></span> · Day <span id="dash-daynum"></span> · <span id="dash-clock"></span></div>
+        <button class="secondary" id="next-day">Next Day →</button></div>
+      <div class="row" style="margin-top:14px"><div class="ring" id="dash-ring">0%</div>
+        <div><div>Streak: <strong id="dash-streak">0</strong> days</div><div>XP: <strong id="dash-xp">0</strong> · Level <strong id="dash-level">1</strong></div>
+        <div id="dash-stats" class="muted"></div><div id="dash-status" class="muted"></div></div></div>
+      <div id="complete-area" class="row" style="margin-top:14px"></div>
+      <div id="confirm-history" class="muted" style="margin-top:10px"></div>
+    </div>
+
+    <div class="card"><h3>Daily Routine</h3>
+      <div id="history-box"></div>
+      <label>Goal name</label>
+      <input id="goal-name" placeholder="e.g. Morning Walk, Workout, Business Work, Sleep…">
+      <div class="row">
+        <div style="flex:1"><label>Start time</label><div class="timepicker" id="start-picker"></div></div>
+        <div style="flex:1"><label>End time</label><div class="timepicker" id="end-picker"></div></div>
+      </div>
+      <label>Category</label><select id="goal-cat"></select>
+      <label>Notes (optional)</label><input id="goal-notes" placeholder="Optional notes">
+      <label><input type="checkbox" id="goal-holiday" style="width:auto"> Mark as on holiday today</label>
+      <div class="row" style="margin-top:12px"><button id="add-goal-btn">+ Add Goal</button><span id="goal-msg" class="muted"></span></div>
+      <div id="goal-list"></div>
+    </div>
+  </section>
+
+  <section id="view-profile" class="card hidden"><h2>Profile</h2><div id="profile-details"></div>
+    <label>Name</label><input id="pf-name"><label>Age</label><input id="pf-age" type="number" min="1" max="120">
+    <label>Timezone</label><input id="pf-tz"><div class="row" style="margin-top:12px"><button id="pf-save">Save Profile</button></div>
+    <p id="pf-msg" class="muted"></p>
+  </section>
+
+  <section id="view-weekly" class="card hidden"><h2>Weekly Report</h2><div id="weekly-body"></div></section>
+  <section id="view-monthly" class="card hidden"><h2>Monthly Analytics</h2><div id="monthly-body"></div><div id="improve-body"></div></section>
+  <section id="view-calendar" class="card hidden"><h2>Calendar</h2><div id="calendar-body"></div></section>
+  <section id="view-templates" class="card hidden"><h2>Routine Templates</h2>
+    <label>Template name</label><input id="tpl-name" placeholder="e.g. Workday routine">
+    <button id="tpl-save">Save today's goals as template</button>
+    <div id="tpl-list" style="margin-top:12px"></div>
+    <h3>Custom Categories</h3><input id="cat-name" placeholder="New category"><button id="cat-add" class="secondary">Add Category</button><div id="cat-list" class="muted"></div>
+    <h3>Search & Filters</h3><input id="search-q" placeholder="Search goals…"><select id="search-cat"></select>
+    <select id="search-status"><option value="">All statuses</option><option value="completed">Completed</option><option value="pending">Pending</option></select>
+    <button id="search-btn" class="secondary">Search</button><div id="search-results"></div>
+  </section>
+  <section id="view-notifications" class="card hidden"><h2>In-app Notifications</h2><p class="muted">Browser push is not promised — notifications here are in-app unless you add a push server later.</p><div id="notif-list"></div></section>
+  <section id="view-settings" class="card hidden"><h2>Settings</h2>
+    <label>Appearance</label><div class="row">
+      <button class="secondary" data-theme-btn="light">Light</button>
+      <button class="secondary" data-theme-btn="dark">Dark</button>
+      <button class="secondary" data-theme-btn="system">System</button></div>
+    <label><input type="checkbox" id="set-auto" style="width:auto"> Auto day confirmation</label>
+    <label>Notification preferences</label>
+    <label><input type="checkbox" class="notif-pref" data-k="daily_reminder" style="width:auto"> Daily routine reminders</label>
+    <label><input type="checkbox" class="notif-pref" data-k="weekly_report" style="width:auto"> Weekly report</label>
+    <label><input type="checkbox" class="notif-pref" data-k="monthly_report" style="width:auto"> Monthly report</label>
+    <label><input type="checkbox" class="notif-pref" data-k="achievements" style="width:auto"> Achievement notifications</label>
+    <div class="row" style="margin-top:12px"><button id="set-save">Save Settings</button><span id="set-msg" class="muted"></span></div>
+    <h3>Data</h3><div class="row"><button id="export-csv" class="secondary">Export CSV</button><button id="export-json" class="secondary">Backup JSON</button></div>
+    <label>Restore from JSON backup</label><input type="file" id="restore-file" accept="application/json">
+    <div class="row" style="margin-top:12px"><button id="delete-account" class="warn">Delete my account & all data</button></div>
+  </section>
+
+  <div id="complete-modal" class="card hidden">
+    <div class="confetti">🎉</div><h3>Complete Day?</h3><p id="complete-text"></p>
+    <div class="row"><button id="confirm-complete">Confirm</button><button id="cancel-complete" class="secondary">Cancel</button></div>
+  </div>
+</main>
+<script src="/static/app.js"></script>
+</body></html>
